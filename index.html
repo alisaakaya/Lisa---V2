@@ -1575,21 +1575,24 @@
   });
   reveals.forEach(el => observer.observe(el));
 
+
+
   // -- Header Mobile Collapse
-  const navToggle = document.getElementById('navToggle');
-  const navLinks = document.querySelector('.nav-links');
+  
+  //const navToggle = document.getElementById('navToggle');
+  //const navLinks = document.querySelector('.nav-links');
 
-  navToggle.addEventListener('click', () => {
-    navToggle.classList.toggle('open');
-    navLinks.classList.toggle('close');
-  });
+  //navToggle.addEventListener('click', () => {
+   // navToggle.classList.toggle('open');
+    //navLinks.classList.toggle('close');
+  //});
 
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      navToggle.classList.remove('open');
-      navLinks.classList.remove('close');
-    });
-  });
+  //navLinks.querySelectorAll('a').forEach(a => {
+    //a.addEventListener('click', () => {
+      //navToggle.classList.remove('open');
+      //navLinks.classList.remove('close');
+    //});
+  //});
 
   // ── DRAGGABLE STICKERS ──
   function makeDraggable(el) {
