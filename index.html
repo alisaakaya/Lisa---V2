@@ -72,6 +72,56 @@
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
     }
+    /*
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    
+    @media (max-width: 900px) {
+      .nav-toggle { display: flex; }
+      .nav-links {
+
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+    
+        flex-direction: column;
+    
+        background: rgba(10,10,10,0.95);
+    
+        backdrop-filter: blur(16px);
+    
+        border-bottom: 1px solid var(--border);
+    
+        padding: 20px 24px;
+    
+        gap: 20px;
+  
+      }
+ 
+      .nav-links.open { display: flex; }
+
+    }
+      */
     .nav-logo {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
@@ -271,14 +321,14 @@
 
     /* ABOUT */
     .about-grid {
-      display: grid;
+      /*display: grid;*/
       grid-template-columns: 1fr 1fr;
       gap: 60px;
       align-items: start;
     }
     .about-text p {
       color: var(--muted);
-      line-height: 1.9;
+      line-height: 2.5;
       margin-bottom: 20px;
     }
     .about-text p span { color: var(--text); }
@@ -291,7 +341,7 @@
       border: 1px solid var(--border);
       border-radius: 40px;
       padding: 8px 18px;
-      font-size: 12px;
+      font-size: 15px;
       color: var(--text);
       letter-spacing: 0.04em;
       transition: border-color 0.2s, color 0.2s;
@@ -325,108 +375,87 @@
     /* ── EXPERIENCE CARDS + MODAL ── */
     .exp-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
 
-    /* flat dark card — like about-card but bigger */
     .exp-card {
       border-radius: 20px;
       overflow: hidden;
       cursor: pointer;
       position: relative;
-      aspect-ratio: 16/9;
+      aspect-ratio: 4/3;
       background: var(--surface);
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
       transition: border-color 0.35s cubic-bezier(.23,1,.32,1),
                   box-shadow 0.35s cubic-bezier(.23,1,.32,1),
-                  transform 0.3s cubic-bezier(.23,1,.32,1);
+                  transform 0.35s cubic-bezier(.23,1,.32,1);
     }
     .exp-card:hover {
-      border-color: rgba(200,241,53,0.35);
-      box-shadow: 0 0 0 1px rgba(200,241,53,0.1),
-                  0 16px 48px rgba(0,0,0,0.5),
-                  inset 0 0 60px rgba(200,241,53,0.03);
+      border-color: rgba(200,241,53,0.45);
+      box-shadow: 0 0 0 1px rgba(200,241,53,0.12), 0 20px 50px rgba(0,0,0,0.5);
       transform: translateY(-3px);
     }
     .exp-card:hover .exp-card-label { opacity: 1; transform: translateY(0); }
 
-    /* logo centered — grayscale dim by default, neon lime on hover */
-    .exp-card-icon {
-      position: relative; z-index: 1;
-      display: flex; align-items: center; justify-content: center;
+    .exp-card-bg {
+      position: absolute; inset: 0;
+      background: var(--surface);
     }
-    .exp-card-icon svg {
-      display: block;
-      filter: brightness(0) invert(1) opacity(0.13);
-      transition: filter 0.4s cubic-bezier(.23,1,.32,1),
-                  drop-shadow 0.4s;
-    }
-    .exp-card:hover .exp-card-icon svg {
-      /* lights up to lime #c8f135 */
-      filter: brightness(0) saturate(100%)
-              invert(89%) sepia(55%) saturate(650%)
-              hue-rotate(28deg) brightness(108%) opacity(0.9)
-              drop-shadow(0 0 14px rgba(200,241,53,0.6));
-    }
+    .exp-bg-apple, .exp-bg-baker, .exp-bg-ge, .exp-bg-ng, .exp-bg-bvcc { background: var(--surface); }
 
-    /* subtle lime radial glow that appears on hover */
-    .exp-card::before {
-      content: '';
+    /* Logo: centered, starts dim, glows lime on hover */
+    .exp-card-icon {
+      position: absolute; inset: 0; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      filter: saturate(0) brightness(0.3);
+      transition: filter 0.4s cubic-bezier(.23,1,.32,1);
+    }
+    .exp-card:hover .exp-card-icon {
+      filter: saturate(1) brightness(1.1) drop-shadow(0 0 20px rgba(200,241,53,0.65));
+    }
+    .exp-card-icon svg { width: 100px; height: 100px; }
+
+    .exp-card-noise {
       position: absolute; inset: 0; z-index: 0;
-      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(200,241,53,0) 0%, transparent 70%);
-      transition: background 0.4s;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
       pointer-events: none;
     }
-    .exp-card:hover::before {
-      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(200,241,53,0.055) 0%, transparent 70%);
-    }
 
-    /* bottom label pill */
     .exp-card-label {
-      position: absolute; bottom: 20px; left: 20px; z-index: 2;
-      background: rgba(10,10,10,0.7);
+      position: absolute; bottom: 16px; left: 16px; z-index: 2;
+      background: rgba(10,10,10,0.75);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(240,235,227,0.12);
       border-radius: 40px;
-      padding: 8px 18px;
+      padding: 7px 16px;
       display: flex; align-items: center; gap: 10px;
       opacity: 0.85;
-      transition: opacity 0.25s, transform 0.25s, border-color 0.25s;
+      transition: opacity 0.25s, transform 0.25s, border-color 0.35s;
       transform: translateY(3px);
     }
-    .exp-card:hover .exp-card-label { border-color: rgba(200,241,53,0.2); }
+    .exp-card:hover .exp-card-label { border-color: rgba(200,241,53,0.25); }
     .exp-card-label-co {
       font-family: 'Syne', sans-serif;
-      font-weight: 700; font-size: 13px;
+      font-weight: 700; font-size: 12px;
       color: var(--text);
     }
     .exp-card-label-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); }
-    .exp-card-label-year { font-size: 12px; color: var(--muted); }
+    .exp-card-label-year { font-size: 11px; color: var(--muted); }
 
-    /* role badge top-right */
     .exp-card-role {
-      position: absolute; top: 16px; right: 16px; z-index: 2;
+      position: absolute; top: 14px; right: 14px; z-index: 2;
       background: rgba(10,10,10,0.6);
       backdrop-filter: blur(10px);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 4px 12px;
-      font-size: 11px; color: var(--muted);
+      padding: 4px 10px;
+      font-size: 13.5px; color: var(--muted);
       letter-spacing: 0.05em;
-      opacity: 0;
-      transform: translateY(-4px);
+      opacity: 0; transform: translateY(-4px);
       transition: opacity 0.25s, transform 0.25s;
     }
     .exp-card:hover .exp-card-role { opacity: 1; transform: translateY(0); }
-
-    /* noise overlay (kept subtle) */
-    .exp-card-noise {
-      position: absolute; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-    }
 
     /* ── MODAL OVERLAY ── */
     .exp-modal-overlay {
@@ -460,9 +489,7 @@
       display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
     }
-    .exp-modal-hero-icon svg { width: 80px; height: 80px;
-      filter: brightness(0) saturate(100%) invert(89%) sepia(55%) saturate(650%) hue-rotate(28deg) brightness(108%) opacity(0.7);
-    }
+    .exp-modal-hero-icon svg { width: 80px; height: 80px; opacity: 0.25; }
     .exp-modal-hero-noise {
       position: absolute; inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
@@ -496,9 +523,7 @@
       border: 1px solid var(--border);
       display: flex; align-items: center; justify-content: center;
     }
-    .exp-modal-logo svg { width: 28px; height: 28px;
-      filter: brightness(0) saturate(100%) invert(89%) sepia(55%) saturate(650%) hue-rotate(28deg) brightness(108%);
-    }
+    .exp-modal-logo svg { width: 28px; height: 28px; }
 
     .exp-modal-company {
       font-family: 'Syne', sans-serif;
@@ -598,7 +623,7 @@
     .project-title {
       font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: 20px;
+      font-size: 28px;
       margin-bottom: 8px;
       letter-spacing: -0.3px;
     }
@@ -664,6 +689,9 @@
     .skill-item:hover { background: rgba(200,241,53,0.08); border-color: rgba(200,241,53,0.4); color: var(--lime); }
 
     /* AWARDS marquee */
+    #awards {
+      scroll-margin-top: 80px;
+    }
     .awards-bar {
       background: var(--lime);
       color: #0a0a0a;
@@ -809,7 +837,7 @@
       border: 1px solid var(--border);
       border-radius: 40px;
       padding: 8px 20px;
-      font-size: 12px;
+      font-size: 14px;
       font-family: 'DM Mono', monospace;
       color: var(--muted);
       cursor: pointer;
@@ -827,7 +855,7 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 8px 16px;
-      font-size: 12px;
+      font-size: 15px;
       color: var(--text);
       opacity: 0;
       transform: translateY(10px) scale(0.95);
@@ -938,7 +966,7 @@
     /* ── RESPONSIVE (UPDATED) ── */
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
-      .nav-links { display: none; }
+      .nav-links { display: flex !important; }
       section { padding: 64px 20px; }
       .hero { padding: 100px 20px 80px; }
       .hero-stats { position: static; margin-top: 48px; flex-direction: row; flex-wrap: wrap; gap: 24px; }
@@ -967,6 +995,32 @@
       .receipt-wrap { padding: 24px; }
       footer { flex-direction: column; gap: 8px; text-align: center; }
     }
+
+    /* WAVE HAND */
+    .wave-hand {
+      display: inline-block;
+      font-size: 52px;
+      cursor: default;
+      transform-origin: 70% 80%;
+      transition: transform 0.1s ease;
+      line-height: 1;
+      user-select: none;
+    }
+    
+    .wave-hand.waving {
+       animation: wave-anim 0.6s ease;
+      }
+      
+      @keyframes wave-anim {
+        0%   { transform: rotate(0deg); }
+        15%  { transform: rotate(22deg); }
+        35%  { transform: rotate(-12deg); }
+        55%  { transform: rotate(18deg); }
+        75%  { transform: rotate(-8deg); }
+        100% { transform: rotate(0deg); }
+      }
+
+
   </style>
 </head>
 <body>
@@ -976,16 +1030,22 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">A<span>.</span>Akaya</a>
+  <!--
+  <button class="nav-toggle" id="navToggle">
+  </button>
+  -->
+  <a href="#" class="nav-logo"><span></span>Akaya</a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
+    <li><a href="#awards">About</a></li>
+    <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
     <li><a href="#projects">Projects</a></li>
-    <li><a href="#skills">Skills</a></li>
+    <!--
     <li><a href="#leadership">Leadership</a></li>
+    -->
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="assets/Alisa Akaya Resume.pdf" class="nav-cta" target="_blank">Resume ↗</a>
+  <a href="assets/Alisa_Akaya_Resume.pdf" class="nav-cta" target="_blank">Resume ↗</a>
 </nav>
 
 <!-- HERO -->
@@ -996,6 +1056,7 @@
   <div class="hero-blob blob3"></div>
 
   <!-- Draggable stickers -->
+  <!--
   <div class="sticker-layer">
     <div class="sticker s-lime" style="top:140px;right:360px;" id="st1">✦ Houston, TX</div>
     <div class="sticker s-sky"  style="top:195px;right:120px;" id="st2">🍵 matcha enthusiast</div>
@@ -1003,12 +1064,13 @@
     <div class="sticker s-coral" style="bottom:220px;right:180px;" id="st4">🎓 Graduating May 2026</div>
     <div class="sticker s-sky"  style="bottom:160px;right:400px;" id="st5">✍️ Slam Poet</div>
   </div>
+  
 
-  <div class="hero-tag">Available · Class of 2026</div>
+  <div class="hero-tag">Available · Class of 2026</div>-->
 
   <h1 class="hero-name">
-    <span class="accent">Alisa</span><br>
-    <span class="stroke">Akaya</span>
+    <span class="stroke">Hi, I'm</span>
+    <span class="accent">Lisa!</span>
   </h1>
 
   <div class="hero-roles">
@@ -1025,42 +1087,47 @@
 
   <div class="hero-btns">
     <a href="#experience" class="btn-primary">View My Work →</a>
-    <a href="/cdn-cgi/l/email-protection#03626f6a70622d6268627a6243646e626a6f2d606c6e" class="btn-secondary">Say Hello</a>
+    <a href="mailto:alisa.akaya@gmail.com" class="btn-secondary">Say Hello</a>
   </div>
 
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-num">5×</div>
-      <div class="stat-label">Internships</div>
+      <div class="stat-num">2×</div>
+      <div class="stat-label">Apple Dev Intern</div>
     </div>
     <div class="stat">
       <div class="stat-num">2×</div>
-      <div class="stat-label">Hackathon Champ</div>
+      <div class="stat-label">National Hackathon Champ</div>
     </div>
     <div class="stat">
-      <div class="stat-num">3.8</div>
-      <div class="stat-label">GPA</div>
+      <div class="stat-num">6×</div>
+      <div class="stat-label">PM Intern</div>
     </div>
   </div>
 </section>
 
 <!-- AWARDS MARQUEE -->
-<div class="awards-bar">
+<div id="awards" class="awards-bar">
   <div class="awards-track">
     <span class="award-item">2× National Hackathon Champion</span>
     <span class="award-item">Apple Academy</span>
+    <span class="award-item">EY Expedition</span>
     <span class="award-item">Deloitte Foundation Scholar</span>
-    <span class="award-item">Dean's List</span>
+    <span class="award-item">2× Honewell IPP Scholar</span>
+    <span class="award-item">8× Dean's List</span>
     <span class="award-item">NSBE Vice President</span>
     <span class="award-item">PMP In Progress</span>
     <span class="award-item">2× National Hackathon Champion</span>
     <span class="award-item">Apple Academy</span>
+    <span class="award-item">EY Expedition</span>
     <span class="award-item">Deloitte Foundation Scholar</span>
-    <span class="award-item">Dean's List</span>
+    <span class="award-item">2× Honewell IPP Scholar</span>
+    <span class="award-item">8× Dean's List</span>
     <span class="award-item">NSBE Vice President</span>
     <span class="award-item">PMP In Progress</span>
   </div>
 </div>
+
 
 <!-- ABOUT -->
 <section id="about">
@@ -1071,9 +1138,10 @@
   </div>
   <div class="about-grid">
     <div class="about-text reveal">
-      <p>I'm <span>Alisa</span> — a graduating senior studying Computer Information Systems at the University of Houston, where I blend <span>software engineering</span>, business strategy, and systems thinking into everything I build.</p>
-      <p>My background is genuinely multidisciplinary: I've spent time at <span>Apple (twice)</span>, Baker Hughes, GE Appliances, and Northrop Grumman, across roles spanning software engineering, program management, and product strategy.</p>
-      <p>I thrive in the intersection of <span>technical depth and strategic clarity</span> — designing systems that are reliable and building roadmaps that actually ship. Outside of tech, I'm a slam poet, multimedia artist, and matcha enthusiast.</p>
+      <p>Hello Hello!! I'm <span>Alisa</span>, a graduating senior studying Computer Information Systems at the University of Houston, where I blend <span>software engineering, business strategy</span>, and <span>systems thinking</span> into everything I build.</p>
+      <p>My background is genuinely multidisciplinary: I've spent time at <span>Apple (twice)</span>, Baker Hughes, GE Appliances, Northrop Grumman, and Black Venture Capital Consortium — across roles spanning software engineering, program management, and product strategy.</p>
+      <p>I thrive in the intersection of <span>technical depth and strategic clarity, designing systems that are reliable and building roadmaps that actually ship.</span> Outside of tech, I'm a slam poet, multimedia artist, and matcha enthusiast.</p>
+      <!--
       <div class="about-pills">
         <span class="pill">Python</span>
         <span class="pill">React.js</span>
@@ -1084,24 +1152,38 @@
         <span class="pill">Agile / Scrum</span>
         <span class="pill">English · Russian · ASL</span>
       </div>
+      -->
     </div>
-    <div class="about-cards reveal">
-      <div class="about-card">
-        <div class="about-card-label">Education</div>
-        <div class="about-card-title">University of Houston</div>
-        <p>B.S. Computer Information Systems · Minor in Business Administration · GPA 3.8 · Expected May 2026</p>
+
+    <!-- Hand + Memoji -->
+    <!--
+    <div class="about-memoji-col reveal">
+      <div class="memoji-wrap">
+        <img src="data:image/png;base64,..." alt="Alisa Memoji" class="memoji-img"/>
+        <div class="memoji-glow"></div>
       </div>
-      <div class="about-card">
-        <div class="about-card-label">Superpower</div>
-        <div class="about-card-title">Clarity Under Complexity</div>
-        <p>I translate messy requirements, data flows, and stakeholder chaos into crisp, executable plans that actually get shipped.</p>
-      </div>
-      <div class="about-card">
-        <div class="about-card-label">Beyond the Code</div>
-        <div class="about-card-title">Creator & Community Builder</div>
-        <p>Slam poet. Multimedia artist. Content creator. VP of NSBE, managing 50+ events for 2K+ participants annually.</p>
-      </div>
+      <div class="wave-hand">👋🏼</div>
     </div>
+    -->
+
+  </div>
+</section>
+
+<!-- SKILLS (Interactive) -->
+<section id="skills" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Skills</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-interactive reveal">
+    <div class="skill-filter-row">
+      <button class="skill-filter-btn active" data-cat="technical">⚙ Technical</button>
+      <button class="skill-filter-btn" data-cat="business">📋 Business & Ops</button>
+      <button class="skill-filter-btn" data-cat="tools">🛠 Tools</button>
+      <button class="skill-filter-btn" data-cat="certs">🏅 Certs & Languages</button>
+    </div>
+    <div class="skill-pool" id="skillPool"></div>
   </div>
 </section>
 
@@ -1113,18 +1195,16 @@
     <div class="section-line"></div>
   </div>
 
-  <div class="exp-grid reveal">
+  <div class="exp-grid reveal" style="grid-template-columns: repeat(3,1fr);">
 
     <!-- Apple SWE 2025 -->
     <div class="exp-card" data-modal="apple-swe">
+      <div class="exp-card-bg exp-bg-apple"></div>
       <div class="exp-card-noise"></div>
       <div class="exp-card-icon">
-        <!-- Apple logo — exact path -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="110" height="110" fill="white">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="var(--lime)" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       </div>
-      <div class="exp-card-role">SWE Intern</div>
+      <div class="exp-card-role">Software Engineering</div>
       <div class="exp-card-label">
         <span class="exp-card-label-co">Apple</span>
         <span class="exp-card-label-dot"></span>
@@ -1134,14 +1214,17 @@
 
     <!-- Baker Hughes -->
     <div class="exp-card" data-modal="baker">
+      <div class="exp-card-bg exp-bg-baker"></div>
       <div class="exp-card-noise"></div>
       <div class="exp-card-icon">
-        <!-- Baker Hughes real logo: stacked double-chevron zigzag ribbon (≥ shape) -->
-        <svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg" width="160" height="104" fill="white">
-          <!-- Top ribbon band: sweeps right then folds back -->
-          <path d="M0 28 L90 6 L200 28 L200 52 L90 30 L0 52 Z"/>
-          <!-- Bottom ribbon band: reverse direction -->
-          <path d="M0 78 L110 100 L200 78 L200 102 L110 124 L0 102 Z"/>
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="bh1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8f135"/><stop offset="100%" stop-color="#7ab81e"/></linearGradient><linearGradient id="bh2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a0c42a"/><stop offset="100%" stop-color="#5a8a14"/></linearGradient></defs>
+          <path d="M8 22 L50 8 L92 22 L50 36 Z" fill="url(#bh1)"/>
+          <path d="M8 22 L50 36 L50 46 L8 32 Z" fill="url(#bh2)"/>
+          <path d="M92 22 L50 36 L50 46 L92 32 Z" fill="url(#bh2)" opacity="0.7"/>
+          <path d="M8 60 L50 46 L92 60 L50 74 Z" fill="url(#bh1)" opacity="0.85"/>
+          <path d="M8 60 L50 74 L50 84 L8 70 Z" fill="url(#bh2)"/>
+          <path d="M92 60 L50 74 L50 84 L92 70 Z" fill="url(#bh2)" opacity="0.7"/>
         </svg>
       </div>
       <div class="exp-card-role">Product Strategy</div>
@@ -1154,13 +1237,12 @@
 
     <!-- Apple Systems 2024 -->
     <div class="exp-card" data-modal="apple-sys">
+      <div class="exp-card-bg exp-bg-apple"></div>
       <div class="exp-card-noise"></div>
       <div class="exp-card-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="110" height="110" fill="white">
-          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="var(--lime)" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       </div>
-      <div class="exp-card-role">Systems Eng.</div>
+      <div class="exp-card-role">Systems Engineering</div>
       <div class="exp-card-label">
         <span class="exp-card-label-co">Apple</span>
         <span class="exp-card-label-dot"></span>
@@ -1170,19 +1252,18 @@
 
     <!-- GE Appliances -->
     <div class="exp-card" data-modal="ge">
+      <div class="exp-card-bg exp-bg-ge"></div>
       <div class="exp-card-noise"></div>
       <div class="exp-card-icon">
-        <!-- GE official circular script monogram — G with inner arc + E with three bars, inside circle -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="white">
-          <!-- Outer circle -->
-          <circle cx="100" cy="100" r="94" stroke="white" stroke-width="8" fill="none"/>
-          <!-- G letterform -->
-          <path d="M38 100 C38 65 65 38 100 38 C121 38 139 47 151 62 L138 72 C130 60 116 53 100 53 C73 53 53 73 53 100 C53 127 73 147 100 147 C118 147 132 137 140 122 L115 122 L115 107 L157 107 L157 125 C146 146 125 162 100 162 C65 162 38 135 38 100 Z"/>
-          <!-- E letterform -->
-          <path d="M108 55 L162 55 L162 70 L123 70 L123 91 L155 91 L155 106 L123 106 L123 130 L162 130 L162 145 L108 145 Z"/>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ge-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8f135"/><stop offset="100%" stop-color="#7ab81e"/></linearGradient></defs>
+          <circle cx="50" cy="50" r="47" fill="none" stroke="url(#ge-g)" stroke-width="4.5"/>
+          <circle cx="50" cy="50" r="40" fill="none" stroke="url(#ge-g)" stroke-width="1.5" opacity="0.5"/>
+          <path d="M38 32 C28 32 20 40 20 50 C20 61 28 69 38 69 C46 69 52 64 54 57 L46 57 C44 61 41 63 38 63 C31 63 26 57 26 50 C26 43 31 38 38 38 C42 38 46 40 48 44 L54 40 C51 35 45 32 38 32 Z M46 50 L54 50 L54 57 L46 57 Z" fill="url(#ge-g)"/>
+          <path d="M58 32 L80 32 L80 38 L64 38 C63 38 62 39 62 40 L62 47 L78 47 L78 53 L62 53 C62 54 62 55 62 56 L62 62 L80 62 L80 68 L58 68 C57 68 56 67 56 66 L56 34 C56 33 57 32 58 32 Z" fill="url(#ge-g)"/>
         </svg>
       </div>
-      <div class="exp-card-role">TPM Intern</div>
+      <div class="exp-card-role">Technical Program Management</div>
       <div class="exp-card-label">
         <span class="exp-card-label-co">GE Appliances</span>
         <span class="exp-card-label-dot"></span>
@@ -1190,21 +1271,41 @@
       </div>
     </div>
 
-    <!-- Northrop Grumman — spans full width -->
-    <div class="exp-card" data-modal="ng" style="grid-column: span 2; aspect-ratio: unset; min-height: 180px;">
+    <!-- BVCC -->
+    <div class="exp-card" data-modal="bvcc">
+      <div class="exp-card-bg exp-bg-bvcc"></div>
       <div class="exp-card-noise"></div>
       <div class="exp-card-icon">
-        <!-- Northrop Grumman: bold NG sans-serif + top-right notch bracket, exact brand -->
-        <svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg" width="220" height="86" fill="white">
-          <!-- N -->
-          <path d="M0 8 L0 102 L22 102 L22 42 L68 102 L90 102 L90 8 L68 8 L68 68 L22 8 Z"/>
-          <!-- G -->
-          <path d="M104 8 C104 8 96 8 89 19 C82 30 82 56 89 74 C96 91 110 104 128 104 C146 104 156 94 160 83 L160 52 L131 52 L131 66 L146 66 L146 78 C142 86 136 90 128 90 C114 90 103 77 103 55 C103 33 113 22 128 22 C137 22 145 27 149 36 L164 28 C157 15 144 8 128 8 Z"/>
-          <!-- Top-right corner bracket notch -->
-          <path d="M200 8 L272 8 L272 50" stroke="white" stroke-width="14" stroke-linecap="butt" fill="none"/>
+        <!-- BVCC: Bold "B" + venture/arrow motif -->
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="bv-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8f135"/><stop offset="100%" stop-color="#7ab81e"/></linearGradient></defs>
+          <!-- VC upward arrow/growth symbol -->
+          <path d="M40 10 L62 38 L50 38 L50 70 L30 70 L30 38 L18 38 Z" fill="url(#bv-g)"/>
+          <!-- small accent bar at base -->
+          <rect x="20" y="72" width="40" height="4" rx="2" fill="url(#bv-g)" opacity="0.6"/>
         </svg>
       </div>
-      <div class="exp-card-role">Strategy PM</div>
+      <div class="exp-card-role">Product Consultant</div>
+      <div class="exp-card-label">
+        <span class="exp-card-label-co">BVCC</span>
+        <span class="exp-card-label-dot"></span>
+        <span class="exp-card-label-year">2024</span>
+      </div>
+    </div>
+
+    <!-- Northrop Grumman -->
+    <div class="exp-card" data-modal="ng">
+      <div class="exp-card-bg exp-bg-ng"></div>
+      <div class="exp-card-noise"></div>
+      <div class="exp-card-icon">
+        <svg viewBox="0 0 140 80" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="ng-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8f135"/><stop offset="100%" stop-color="#7ab81e"/></linearGradient></defs>
+          <path d="M4 8 L4 72 L16 72 L16 30 L44 72 L56 72 L56 8 L44 8 L44 50 L16 8 Z" fill="url(#ng-g)"/>
+          <path d="M68 8 C68 8 62 8 57 17 C52 24 52 56 57 63 C62 71 72 76 82 76 C92 76 100 70 103 63 L103 38 L84 38 L84 48 L93 48 L93 60 C90 66 87 68 82 68 C73 68 66 60 66 42 C66 24 73 16 82 16 C87 16 92 19 95 25 L105 19 C100 11 92 8 82 8 Z" fill="url(#ng-g)"/>
+          <path d="M112 4 L136 4 L136 28" stroke="url(#ng-g)" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter" fill="none"/>
+        </svg>
+      </div>
+      <div class="exp-card-role">Project Management</div>
       <div class="exp-card-label">
         <span class="exp-card-label-co">Northrop Grumman</span>
         <span class="exp-card-label-dot"></span>
@@ -1233,7 +1334,7 @@
   <div class="projects-grid">
 
     <div class="project-card reveal">
-      <div class="project-award">🏆 National Champion</div>
+      <!--<div class="project-award">🏆 National Champion</div>-->
       <div class="project-title">JPMC Datathon</div>
       <div class="project-sub">Community Impact Analysis Platform</div>
       <p class="project-desc">Performed geospatial analysis and K-means clustering on large-scale demographic, econometric, and education datasets to identify optimal facility locations across the Chicago metro area. Engineered an interactive heatmap correlating multi-dimensional community factors with site viability scores.</p>
@@ -1247,7 +1348,7 @@
     </div>
 
     <div class="project-card reveal">
-      <div class="project-award">🏆 Hackathon Winner</div>
+      <!--<div class="project-award">🏆 Hackathon Winner</div>-->
       <div class="project-title">Meta Network Hack</div>
       <div class="project-sub">Distributed Systems Monitoring</div>
       <p class="project-desc">Built a capacity monitoring and alerting system using Python and AWS Lambda to detect throughput saturation and reliability risks from device telemetry. Automated configuration management with S3 and infrastructure-as-code, reducing manual updates and improving network visibility.</p>
@@ -1261,40 +1362,23 @@
     </div>
 
     <div class="project-card reveal">
-      <div class="project-award">📦 Deployed</div>
-      <div class="project-title">Commodity Analytics</div>
-      <div class="project-sub">Procurement Intelligence Platform</div>
-      <p class="project-desc">Concept-to-deployment analytics workspace tracking 55+ commodities with automated price indexing to accelerate procurement decisions. Built Power BI dashboards integrating SAP/ERP data, enabling faster supplier negotiations and executive-level visibility.</p>
+      <!--<div class="project-award">📦 Deployed</div>-->
+      <div class="project-title">Capital One Hackathon</div>
+      <div class="project-sub">Social Justice Platform</div>
+      <p class="project-desc">Regional Champion. Full-stack web app serving curated social justice resources to students — built with HTML, CSS, JavaScript, and third-party API integrations with a dynamic database backend for real-time content retrieval.</p>
       <div class="project-tags">
-        <span class="project-tag">Power BI</span>
-        <span class="project-tag">SQL</span>
-        <span class="project-tag">SAP</span>
-        <span class="project-tag">Automation</span>
+        <span class="project-tag">HTML</span>
+        <span class="project-tag">CSS</span>
+        <span class="project-tag">JavaScript</span>
+        <span class="project-tag">API</span>
       </div>
     </div>
 
   </div>
 </section>
 
-<!-- SKILLS (Interactive) -->
-<section id="skills" style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-  <div class="section-header reveal">
-    <span class="section-num">04</span>
-    <h2 class="section-title">Skills</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="skills-interactive reveal">
-    <div class="skill-filter-row">
-      <button class="skill-filter-btn active" data-cat="technical">⚙ Technical</button>
-      <button class="skill-filter-btn" data-cat="business">📋 Business & Ops</button>
-      <button class="skill-filter-btn" data-cat="tools">🛠 Tools</button>
-      <button class="skill-filter-btn" data-cat="certs">🏅 Certs & Languages</button>
-    </div>
-    <div class="skill-pool" id="skillPool"></div>
-  </div>
-</section>
-
 <!-- EDUCATION -->
+<!--
 <section id="education">
   <div class="section-header reveal">
     <span class="section-num">05</span>
@@ -1323,8 +1407,10 @@
     </div>
   </div>
 </section>
+-->
 
 <!-- NSBE / LEADERSHIP -->
+<!--
 <section id="leadership" class="nsbe-section">
   <div class="section-header reveal">
     <span class="section-num">06</span>
@@ -1365,8 +1451,10 @@
     </div>
   </div>
 </section>
+-->
 
 <!-- FUN: RECEIPT + "A LITTLE MORE" -->
+<!--
 <section id="fun">
   <div class="section-header reveal">
     <span class="section-num">07</span>
@@ -1374,8 +1462,10 @@
     <div class="section-line"></div>
   </div>
   <div class="fun-row">
+    -->
 
     <!-- Receipt -->
+    <!--
     <div class="receipt-wrap reveal">
       <div class="receipt-header">
         <div class="receipt-store">— candidate receipt —</div>
@@ -1399,8 +1489,10 @@
       <div class="receipt-total"><span>TOTAL VALUE</span><span class="rv">⭐ HIRE ME</span></div>
       <div class="receipt-footer">thank you for your consideration ♡</div>
     </div>
+    -->
 
     <!-- Fun facts / personality card -->
+    <!--
     <div style="display:flex;flex-direction:column;gap:16px;">
       <div class="about-card reveal" style="flex:1;">
         <div class="about-card-label">Currently</div>
@@ -1418,31 +1510,36 @@
         <p>English, Russian, and American Sign Language. Turns out communication systems — human or technical — are just really fascinating.</p>
       </div>
     </div>
-
+    -->
   </div>
 </section>
 
 
+
 <section id="contact" style="background: var(--surface); border-top: 1px solid var(--border);">
   <div class="contact-inner reveal">
-    <div style="font-size:12px;color:var(--lime);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">08 · Get In Touch</div>
+    <div style="font-size:16px;color:var(--lime);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;">04  Let's Stay In Touch</div>
     <div class="contact-big">
+      <!---
       Let's<br><span class="lime">Build</span><br>Something.
+      -->
     </div>
+    <!--
     <p style="color:var(--muted);max-width:480px;margin:0 auto;line-height:1.8;">
       I'm graduating in May 2026 and actively exploring full-time opportunities in software engineering, product, and technical program management. Let's connect.
     </p>
+    -->
     <div class="contact-links">
-      <a href="/cdn-cgi/l/email-protection#56373a3f253778373d372f3716313b373f3a7835393b" class="contact-link">✉ Email Me</a>
+      <a href="mailto:alisa.akaya@gmail.com" class="contact-link">✉ Email Me</a>
       <a href="https://www.linkedin.com/in/alisaakaya/" class="contact-link" target="_blank">↗ LinkedIn</a>
-      <a href="assets/Alisa Akaya Resume.pdf" class="contact-link" target="_blank">↓ Resume</a>
+      <a href="assets/Alisa_Akaya_Resume.pdf" class="contact-link" target="_blank">↓ Resume</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <span>© 2026 Alisa Akaya</span>
-  <span style="color:var(--lime);">Built with intention ✦</span>
+  <span>© 2026 Akaya, All Rights Deserved</span>
+  <span style="color:var(--lime);">Built with HTML, CSS, React, and love ✦</span>
 </footer>
 
 <script>
@@ -1477,6 +1574,22 @@
     });
   });
   reveals.forEach(el => observer.observe(el));
+
+  // -- Header Mobile Collapse
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.querySelector('.nav-links');
+
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('open');
+    navLinks.classList.toggle('close');
+  });
+
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navToggle.classList.remove('open');
+      navLinks.classList.remove('close');
+    });
+  });
 
   // ── DRAGGABLE STICKERS ──
   function makeDraggable(el) {
@@ -1521,6 +1634,8 @@
     const el = document.getElementById(id);
     if (el) makeDraggable(el);
   });
+
+  
 
   // ── INTERACTIVE SKILL PICKER ──
   const skillData = {
@@ -1621,6 +1736,15 @@
         'Improved program delivery accuracy by <strong>25%</strong> translating demand signals into prioritized roadmaps across a global engineering team.',
         'Increased operational throughput by <strong>60%</strong> via Python & SQL automation pipelines improving KPI visibility and planning efficiency.',
         'Managed dependencies across a <strong>12-person global cross-functional team</strong> supporting portfolio governance and change enablement.'
+      ]
+    },
+    'bvcc': {
+      company: 'Black Venture Capital Consortium', role: 'Product Management Consultant',
+      timeline: 'Jan – May 2024', location: 'Houston, TX',
+      bg: 'linear-gradient(160deg, #0a0a0a 0%, #111 100%)',
+      bullets: [
+        'Owned end-to-end product development for a healthtech startup feature, conducting user research with <strong>20+ clinical and operational stakeholders</strong> to define 8+ product requirements and prioritize feature roadmap based on user impact and technical feasibility.',
+        'Delivered high-fidelity product demos and implementation framework including technical specifications, success metrics (<strong>30% efficiency gain</strong>), and phased 3-stage rollout plan that enabled executive buy-in for <strong>$500K+ investment decisions</strong>.'
       ]
     },
     'ng': {
